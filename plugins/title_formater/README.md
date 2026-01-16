@@ -1,7 +1,3 @@
-Here is a professional `README.md` for your GitHub repository. It is designed to be clear for users and includes all necessary setup instructions.
-
----
-
 # Stash Title Case Formatter
 
 A plugin for [Stash](https://github.com/stashapp/stash) that automatically standardizes scene titles using "smart" title casing. It ensures your library looks professional by capitalizing principal words while keeping articles, conjunctions, and specific acronyms formatted correctly.
