@@ -8,8 +8,12 @@ from stashapi.stashapp import StashInterface
 # --- CONFIGURATION ---
 FFMPEG_PATH = r"C:\ffmpeg\bin\ffmpeg.exe"
 FFPROBE_PATH = r"C:\ffmpeg\bin\ffprobe.exe"
-OUTPUT_DIR = r"F:\Temp"
+OUTPUT_DIR = r"F:\Clips"
 SAMPLE_DURATION = 10
+
+# Define your sample points here as decimals (e.g., 0.25 = 25%)
+# You can add as many or as few as you like.
+SAMPLE_PERCENTAGES = [0.50, 0.75, 0.90]
 # ---------------------
 
 def get_video_duration(video_path):
@@ -28,6 +32,7 @@ def get_video_duration(video_path):
 
 def create_video_sample(input_path, output_path, start_time_seconds):
     try:
+        # Format start time for FFmpeg
         start_time_formatted = str(timedelta(seconds=start_time_seconds))
         cmd = [
             FFMPEG_PATH, "-y",
@@ -37,6 +42,8 @@ def create_video_sample(input_path, output_path, start_time_seconds):
             "-c", "copy",
             output_path
         ]
+        # We use capture_output=True to keep the Stash logs clean 
+        # unless there is an actual error.
         subprocess.run(cmd, capture_output=True, check=True)
         return True
     except Exception as e:
@@ -52,7 +59,7 @@ def process_scenes(stash, scenes):
         print("No scenes found matching the criteria.")
         return
 
-    print(f"Starting sampling for {total} scenes...")
+    print(f"Starting sampling for {total} scenes using percentages: {SAMPLE_PERCENTAGES}")
 
     for idx, scene in enumerate(scenes):
         files = scene.get("files", [])
@@ -63,16 +70,27 @@ def process_scenes(stash, scenes):
         base_name = os.path.splitext(os.path.basename(input_file_path))[0]
         
         duration = get_video_duration(input_file_path)
-        if not duration or duration < 20:
+        
+        # Ensure video is long enough to support the latest sample point
+        # (duration - 10 seconds to ensure the clip doesn't go past the end)
+        if not duration or duration < (max(SAMPLE_PERCENTAGES) * duration) + SAMPLE_DURATION:
+            print(f"Skipping {base_name}: Video too short for requested sample points.")
             continue
 
         print(f"[{idx+1}/{total}] Sampling: {base_name}")
 
-        start_times = [duration * 0.50, duration * 0.75, duration * 0.90]
+        # Generate start times based on the configuration list
+        for i, pct in enumerate(SAMPLE_PERCENTAGES, 1):
+            start_time = duration * pct
+            
+            # Safety: if the percentage results in a start time too close to the end, 
+            # FFmpeg might fail. We cap it at Duration - Sample Duration.
+            if start_time > duration - SAMPLE_DURATION:
+                start_time = duration - SAMPLE_DURATION
 
-        for i, start_time in enumerate(start_times, 1):
             output_filename = f"{base_name}-sample ({i}).mp4"
             output_file_path = os.path.join(OUTPUT_DIR, output_filename)
+            
             create_video_sample(input_file_path, output_file_path, start_time)
 
 def main():
@@ -94,7 +112,6 @@ def main():
         target_tag = args.get("tagName")
         print(f"Searching for scenes with tag: {target_tag}")
         
-        # Find the tag ID first
         tags = stash.find_tags(f={"name": {"value": target_tag, "modifier": "EQUALS"}})
         if tags:
             tag_id = tags[0].get("id")
