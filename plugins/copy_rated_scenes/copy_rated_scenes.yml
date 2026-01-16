@@ -1,0 +1,19 @@
+name: "Copy 5-Star Scenes"
+description: "Copies the video file of scenes rated 5 stars to a specific folder."
+version: "1.5"
+
+exec:
+  - python
+  - "{pluginDir}/copy_scene.py"
+
+hooks:
+  - name: Copy on Rating Update
+    description: Triggered when a scene is updated
+    triggeredBy:
+      - Scene.Update.Post
+
+tasks:
+  - name: "Copy Existing 5-Star Scenes"
+    description: Scans the database and copies scenes currently rated 5 stars.
+    defaultArgs:
+      mode: bulk
