@@ -1,0 +1,13 @@
+name: "Title Case Formatter"
+description: "Standardizes scene titles using smart title casing and custom acronyms."
+version: "1.0"
+
+exec:
+  - python
+  - "{pluginDir}/title_formatter.py"
+
+tasks:
+  - name: "Format All Scene Titles"
+    description: "Scan all scenes and update titles to Title Case."
+    defaultArgs:
+      mode: bulk
