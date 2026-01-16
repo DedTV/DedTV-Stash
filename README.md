@@ -2,7 +2,7 @@
 
 A suite of automation tools and utility plugins for [Stash](https://github.com/stashapp/stash).
 
-### NOTE: These plugins are mostly AI generated for use with the latest Development version of Stash. They have not been fully tested and may not function on the latest Stable version or future Dev versions. **Use at your own risk!**
+#### NOTE: These plugins are mostly AI generated from stand alone scripts for use with the latest Development version of Stash. They have not been fully tested and may not function on the latest Stable version or future Dev versions. **Use at your own risk!**
 
 ## 🛠 Plugins Overview
 
