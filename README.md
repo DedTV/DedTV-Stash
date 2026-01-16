@@ -30,14 +30,45 @@ Scans filenames managed by Stash and removes "illegal" or problematic non-ASCII 
 * **Safety First:** Includes a **Dry Run** mode to preview renames in the logs before any changes are committed to the disk.
 * **Formatting:** Collapses multiple spaces and trims trailing dots/spaces for clean filesystem paths.
 
+Here is the updated section for your **Video Sampler** plugin. This version explicitly details how to modify the extraction points and the specific tag used for the queuing system.
+
 ### 4. Video Sampler
 
 **Function:** Media Processing
-Automates the generation of preview clips using FFmpeg. It extracts multiple 10-second segments from scenes to provide a comprehensive look at the content without manual seeking.
+Automates the generation of preview clips using FFmpeg. It extracts multiple 10-second (configurable) segments from scenes to provide a comprehensive "at-a-glance" look at the content without manual seeking.
 
-* **Configurable Points:** Default extraction at **25%**, **50%**, **70%**, and **99%** of video duration.
-* **Lossless:** Uses stream copying (`-c copy`) for near-instant clip generation without CPU-intensive re-encoding.
-* **Filtering:** Run against your entire library, only 5-star scenes, or scenes with a specific "To Sample" tag.
+* **Configurable Extraction Points:** By default, the script takes samples at **50%, 75%, and 90%** of the video's duration.
+* **Lossless Processing:** Uses stream copying (`-c copy`) for near-instant clip generation without CPU-intensive re-encoding.
+* **Flexible Filtering:** Can be run against your entire library, only 5-star scenes, or scenes with a specific "To Sample" tag.
+
+#### 🔧 Configuration Instructions
+
+To customize how the sampler behaves, open `video_sampler.py` in a text editor and locate the `# --- CONFIGURATION ---` section:
+
+1. **Changing Sample Points:**
+Locate the `SAMPLE_PERCENTAGES` list. You can add or remove decimal values here.
+* *Example for three points:* `SAMPLE_PERCENTAGES = [0.10, 0.50, 0.90]` (10%, 50%, 90%)
+* *Example for five points:* `SAMPLE_PERCENTAGES = [0.20, 0.40, 0.60, 0.80, 0.95]`
+
+
+2. **Configuring the "To Sample" Tag:**
+The specific tag used to filter scenes is defined in the `video_sampler.yml` file under the `defaultArgs` for the **Tagged Scenes** task:
+```yaml
+- name: "Generate Samples for Tagged Scenes"
+  defaultArgs:
+    mode: "tag"
+    tagName: "To Sample"  # <--- Change "To Sample" to any tag you prefer
+
+```
+
+
+*Ensure the tag exists in your Stash database before running this task.*
+3. **Adjusting Clip Length:**
+In `video_sampler.py`, change `SAMPLE_DURATION = 10` to your preferred length in seconds (e.g., `5` or `15`).
+
+---
+
+**Would you like me to add a troubleshooting section specifically for common FFmpeg path errors on Windows?**
 
 ---
 
