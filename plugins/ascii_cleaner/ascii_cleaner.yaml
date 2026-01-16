@@ -1,0 +1,14 @@
+name: "Filename ASCII Cleaner"
+description: "Removes emojis and non-ASCII characters from filenames on disk."
+version: "1.0"
+
+exec:
+  - python
+  - "{pluginDir}/ascii_cleaner.py"
+
+tasks:
+  - name: "Clean Filenames (Non-ASCII)"
+    description: "Removes non-ASCII characters from all files in the configured path."
+    defaultArgs:
+      mode: bulk
+      dryRun: true # Default to true for safety
