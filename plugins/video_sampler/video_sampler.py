@@ -4,6 +4,11 @@ import os
 import subprocess
 from datetime import timedelta
 from stashapi.stashapp import StashInterface
+import io
+
+# Force UTF-8 encoding for standard output to handle emojis in filenames
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # --- CONFIGURATION ---
 FFMPEG_PATH = r"C:\ffmpeg\bin\ffmpeg.exe"
