@@ -1,0 +1,22 @@
+name: "Video Sampler"
+description: "Generates 10-second clips from scenes at 50%, 75%, and 90% duration."
+version: "1.1"
+
+exec:
+  - python
+  - "{pluginDir}/video_sampler.py"
+
+tasks:
+  - name: "Generate Samples for 5-Star Scenes"
+    description: "Creates samples for scenes rated 5 stars."
+    defaultArgs:
+      mode: "rated"
+  - name: "Generate Samples for Tagged Scenes"
+    description: "Creates samples for scenes with a specific tag."
+    defaultArgs:
+      mode: "tag"
+      tagName: "To Sample" # <--- Change this to your preferred tag
+  - name: "Generate Samples for All Scenes"
+    description: "Creates samples for every scene in the library (Warning: slow)."
+    defaultArgs:
+      mode: "all"
