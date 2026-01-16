@@ -105,23 +105,24 @@ def main():
 
     scenes = []
 
+    # Use pagesize=-1 to fetch all results without pagination
     if mode == "rated":
-        scenes = stash.find_scenes(f={"rating100": {"value": 100, "modifier": "EQUALS"}}, get_all=True)
+        scenes = stash.find_scenes(f={"rating100": {"value": 100, "modifier": "EQUALS"}}, pagesize=-1)
     
     elif mode == "tag":
         target_tag = args.get("tagName")
         print(f"Searching for scenes with tag: {target_tag}")
         
-        tags = stash.find_tags(f={"name": {"value": target_tag, "modifier": "EQUALS"}})
+        tags = stash.find_tags(f={"name": {"value": target_tag, "modifier": "EQUALS"}}, pagesize=-1)
         if tags:
             tag_id = tags[0].get("id")
-            scenes = stash.find_scenes(f={"tags": {"value": [tag_id], "modifier": "INCLUDES"}}, get_all=True)
+            scenes = stash.find_scenes(f={"tags": {"value": [tag_id], "modifier": "INCLUDES"}}, pagesize=-1)
         else:
             print(f"Error: Tag '{target_tag}' not found in Stash.")
             return
 
     elif mode == "all":
-        scenes = stash.find_scenes(get_all=True)
+        scenes = stash.find_scenes(pagesize=-1)
     
     process_scenes(stash, scenes)
 
