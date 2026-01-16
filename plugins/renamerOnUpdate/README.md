@@ -1,6 +1,5 @@
 # *renamerOnUpdate*
 Using metadata from your Stash to rename/move your file.
-Updated for v30.x
 
 ## Table of Contents  
 
@@ -35,8 +34,8 @@ Updated for v30.x
 		- [*performer_limit*](#performer_limit)
 
 # Requirement
-- Stash (v0.24+)
-- Python 3.6+ (Tested LIGHTLY on Python v3.11 Linux)
+- Stash (v0.30+)
+- Python 3.6+ 
 - Request Module (https://pypi.org/project/requests/)
 
 # Installation (manually)
