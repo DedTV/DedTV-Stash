@@ -1,5 +1,6 @@
 # *renamerOnUpdate*
 Using metadata from your Stash to rename/move your file.
+Updated for v30.x
 
 ## Table of Contents  
 
