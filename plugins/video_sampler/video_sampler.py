@@ -104,25 +104,35 @@ def main():
     mode = args.get("mode")
 
     scenes = []
+    # This filter tells Stash to return all results in one page
+    all_pages_filter = {"per_page": -1}
 
-    # Use pagesize=-1 to fetch all results without pagination
     if mode == "rated":
-        scenes = stash.find_scenes(f={"rating100": {"value": 100, "modifier": "EQUALS"}}, pagesize=-1)
+        scenes = stash.find_scenes(
+            f={"rating100": {"value": 100, "modifier": "EQUALS"}}, 
+            filter=all_pages_filter
+        )
     
     elif mode == "tag":
         target_tag = args.get("tagName")
         print(f"Searching for scenes with tag: {target_tag}")
         
-        tags = stash.find_tags(f={"name": {"value": target_tag, "modifier": "EQUALS"}}, pagesize=-1)
+        tags = stash.find_tags(
+            f={"name": {"value": target_tag, "modifier": "EQUALS"}}, 
+            filter=all_pages_filter
+        )
         if tags:
             tag_id = tags[0].get("id")
-            scenes = stash.find_scenes(f={"tags": {"value": [tag_id], "modifier": "INCLUDES"}}, pagesize=-1)
+            scenes = stash.find_scenes(
+                f={"tags": {"value": [tag_id], "modifier": "INCLUDES"}}, 
+                filter=all_pages_filter
+            )
         else:
             print(f"Error: Tag '{target_tag}' not found in Stash.")
             return
 
     elif mode == "all":
-        scenes = stash.find_scenes(pagesize=-1)
+        scenes = stash.find_scenes(filter=all_pages_filter)
     
     process_scenes(stash, scenes)
 
