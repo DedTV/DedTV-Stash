@@ -32,8 +32,6 @@ Scans filenames managed by Stash and removes "illegal" or problematic non-ASCII 
 * **Safety First:** Includes a **Dry Run** mode to preview renames in the logs before any changes are committed to the disk.
 * **Formatting:** Collapses multiple spaces and trims trailing dots/spaces for clean filesystem paths.
 
-Here is the updated section for your **Video Sampler** plugin. This version explicitly details how to modify the extraction points and the specific tag used for the queuing system.
-
 ### 4. Video Sampler
 
 **Function:** Media Processing
